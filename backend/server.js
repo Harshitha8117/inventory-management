@@ -2,22 +2,22 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
-// Load DB (this auto-creates tables in better-sqlite3 version)
+// Initialize DB
 require("./db");
 
 const productsRouter = require("./routes/products.routes");
 const historyRouter = require("./routes/history.routes");
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+
+// Render assigns PORT dynamically — MUST use only process.env.PORT
+const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
 
-// Product routes
+// Routes
 app.use("/api/products", productsRouter);
-
-// History routes (correct base route)
 app.use("/api/products", historyRouter);
 
 // Health check
