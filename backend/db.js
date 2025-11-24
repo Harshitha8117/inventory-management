@@ -1,8 +1,11 @@
-const Database = require('better-sqlite3');
+const path = require("path");
+const Database = require("better-sqlite3");
 
-const db = new Database('./inventory.sqlite', {
-  verbose: console.log, // optional
-});
+// On Render, __dirname points to /opt/render/project/src/backend
+const dbPath = path.join(__dirname, "inventory.sqlite");
+
+// Create database safely
+const db = new Database(dbPath);
 
 // Create tables if not exist
 db.prepare(`
