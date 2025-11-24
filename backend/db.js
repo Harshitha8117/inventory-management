@@ -1,13 +1,14 @@
 const path = require("path");
 const Database = require("better-sqlite3");
 
-// On Render, __dirname points to /opt/render/project/src/backend
+// ALWAYS USE ABSOLUTE PATH ON RENDER
 const dbPath = path.join(__dirname, "inventory.sqlite");
 
-// Create database safely
+console.log("Using SQLite DB at:", dbPath);
+
 const db = new Database(dbPath);
 
-// Create tables if not exist
+// Create products table
 db.prepare(`
   CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,6 +22,7 @@ db.prepare(`
   )
 `).run();
 
+// Create inventory history table
 db.prepare(`
   CREATE TABLE IF NOT EXISTS inventory_history (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
