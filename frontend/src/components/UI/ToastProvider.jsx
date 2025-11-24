@@ -1,19 +1,16 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 
-// Create context
 const ToastContext = createContext();
 
-// Hook for using toast
 export function useToast() {
   return useContext(ToastContext);
 }
 
-// Toast Provider component (this is what we must export)
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
-  // push new toast
-  const push = useCallback((message, type = "info", timeout = 3500) => {
+  // Generic push
+  const push = useCallback((message, type = "info", timeout = 3000) => {
     const id = Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
 
@@ -22,14 +19,19 @@ export function ToastProvider({ children }) {
     }, timeout);
   }, []);
 
+  // Helpers like real toast libs
+  const success = (msg) => push(msg, "success");
+  const error = (msg) => push(msg, "error");
+  const info = (msg) => push(msg, "info");
+
   const remove = (id) =>
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
 
   return (
-    <ToastContext.Provider value={{ push, remove }}>
+    <ToastContext.Provider value={{ push, success, error, info }}>
       {children}
 
-      {/* Toasts container */}
+      {/* Toasts UI */}
       <div className="fixed right-6 bottom-6 z-50 flex flex-col gap-3">
         {toasts.map((toast) => (
           <div
@@ -53,9 +55,7 @@ export function ToastProvider({ children }) {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide {
-          animation: slide-in .2s ease-out;
-        }
+        .animate-slide { animation: slide-in .2s ease-out; }
       `}</style>
     </ToastContext.Provider>
   );
