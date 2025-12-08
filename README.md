@@ -1,4 +1,4 @@
-# 📦 Product Inventory Management System
+# 📦 Product Inventory Management
 
 Full-Stack Application — React • Node.js • Express • SQLite
 
